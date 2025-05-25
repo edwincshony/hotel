@@ -1,5 +1,5 @@
 const rooms = Array.from({ length: 9 }, (_, i) => (100 + i).toString());
-const CLEANING_DURATION = 2 * 1000; // 2 seconds // 30 minutes in milliseconds
+const CLEANING_DURATION = 5*60*1000; // 2 seconds for testing, change to 30*60*1000 for 30 min
 
 let roomData = JSON.parse(localStorage.getItem('roomData')) || {};
 
@@ -16,7 +16,10 @@ function init() {
   });
 
   renderRooms();
-  setInterval(updateStatuses, 1000); // Real-time update
+  setInterval(() => {
+    updateStatuses();
+    renderRooms(); // render every second to update timer
+  }, 1000); // Real-time update
 }
 
 function updateStatuses() {
@@ -37,13 +40,14 @@ function updateStatuses() {
 
   if (updated) {
     saveData();
-    renderRooms();
   }
 }
 
 function renderRooms() {
   const container = document.getElementById('room-container');
   container.innerHTML = '';
+
+  const now = Date.now();
 
   rooms.forEach((room) => {
     const data = roomData[room];
@@ -57,7 +61,21 @@ function renderRooms() {
       'available'
     );
 
-    const statusText = `<div class="status">Status: ${data.status}</div>`;
+    let statusText = `<div class="status">Status: ${data.status}</div>`;
+
+    // Add timer for Cleaning status
+    if (data.status === 'Cleaning' && data.lastVacated) {
+      const vacatedTime = new Date(data.lastVacated).getTime();
+      const timePassed = now - vacatedTime;
+      const timeLeft = Math.max(0, CLEANING_DURATION - timePassed);
+      const secondsLeft = Math.ceil(timeLeft / 1000);
+      const minutes = Math.floor(secondsLeft / 60);
+        const seconds = secondsLeft % 60;
+        const paddedSeconds = seconds.toString().padStart(2, '0');
+        statusText += `<div class="timer">Time left: ${minutes}:${paddedSeconds} minutes</div>`;
+
+    }
+
     let buttonHTML = '';
 
     if (data.status === 'Occupied') {
