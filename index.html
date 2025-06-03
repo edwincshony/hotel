@@ -3,12 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Room Status Tracker</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Price Calculator</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <h1>Room Status Tracker</h1>
-  <div id="room-container" class="grid"></div>
+  <div class="container">
+    <h1>Price Calculator (INR)</h1>
+    
+    <div class="input-group">
+      <label for="pricePerKg">Current Price per Kilogram (INR):</label>
+<input type="number" id="pricePerKg" placeholder="Enter price in INR" />
+
+    </div>
+
+    <div class="buttons">
+      <button data-weight="50">50g</button>
+      <button data-weight="100">100g</button>
+      <button data-weight="200">200g</button>
+      <button data-weight="250">250g</button>
+      <button data-weight="500">500g</button>
+      <button data-weight="750">750g</button>
+    </div>
+
+    <div class="custom-input">
+      <label for="customGrams">Custom Grams:</label>
+      <input type="number" id="customGrams" placeholder="e.g., 123" />
+      <button id="calculateCustom">Calculate</button>
+    </div>
+
+    <div class="result" id="result">
+      <p>Total Cost: <span id="totalCost">--</span> INR</p>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
